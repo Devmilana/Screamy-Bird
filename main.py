@@ -39,7 +39,7 @@ class Bird:
         self.img = pygame.image.load(os.path.join('img', 'bird.png')) # bird image path
         self.img_width = self.img.get_size()[0]
         self.img_height = self.img.get_size()[1]
-        self.jump = 4 # jump height
+        self.jump = 5 # jump height
         self.gravity = 8 # gravity fall height
 
     # Bird jump movement
@@ -121,7 +121,7 @@ class ScreamyBird:
 
     bird = Bird(150, 200) # initial bird position
     score_display = ScoreDisplay() # score display
-    Pipe = Pipe(70, random.randint(0, int(screen_height / 2)), bird.img_height * 4) # initial pipe position with gap size
+    Pipe = Pipe(70, random.randint(0, int(screen_height / 2)), bird.img_height * 3.5) # initial pipe position with gap size
 
     def __init__(self):
         self.game_over = False
@@ -130,7 +130,7 @@ class ScreamyBird:
     def scream_check(indata, outdata, frames, time, status):
         scream_volume = np.linalg.norm(indata) # Normalize scream volume
         # Check scream volume threshold
-        if scream_volume > 1.5: 
+        if scream_volume > 1.3: 
             ScreamyBird.bird.fly() # bird jump if threshold passed
         else:
             ScreamyBird.bird.fall() # bird falls if threshold not reached
@@ -139,7 +139,7 @@ class ScreamyBird:
     def reset_game():
         ScreamyBird.bird = Bird(150, 200)
         ScreamyBird.score_display.reset()
-        ScreamyBird.Pipe = Pipe(70, random.randint(0, int(screen_height / 2)), ScreamyBird.bird.img_height * 5)
+        ScreamyBird.Pipe = Pipe(70, random.randint(0, int(screen_height / 2)), ScreamyBird.bird.img_height * 3.5)
 
     # Restart or exit game  
     def restart_exit(self):
@@ -202,7 +202,7 @@ class ScreamyBird:
         x_Pipe = screen_width
         y_Pipe = 0
         Pipe_width = 70 # width of Pipes
-        Pipe_move = 6  # speed of incoming pipes
+        Pipe_move = 9  # speed of incoming pipes
         
         # Call reset game 
         ScreamyBird.reset_game()
