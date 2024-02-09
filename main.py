@@ -20,8 +20,8 @@ clock = pygame.time.Clock()
 # screen_height = pygame.display.Info().current_h
 
 # Manually set game window size
-screen_width = 1536
-screen_height = 864
+screen_width = 900
+screen_height = 1060
 screen = pygame.display.set_mode((screen_width, screen_height)) 
 pygame.display.set_caption('SCREAMY BIRD')
 
@@ -137,7 +137,7 @@ class ScreamyBird:
     def scream_check(indata, outdata, frames, time, status):
         scream_volume = np.linalg.norm(indata) # Normalize scream volume
         # Check scream volume threshold
-        if scream_volume > 2: 
+        if scream_volume > 2.5: 
             ScreamyBird.bird.fly() # bird jump if threshold passed
         else:
             ScreamyBird.bird.fall() # bird falls if threshold not reached
@@ -209,7 +209,7 @@ class ScreamyBird:
         x_Pipe = screen_width
         y_Pipe = 0
         Pipe_width = 85 # width of Pipes
-        Pipe_move = 9  # speed of incoming pipes
+        Pipe_move = 4  # speed of incoming pipes
         
         # Call reset game 
         ScreamyBird.reset_game()
@@ -258,7 +258,7 @@ class ScreamyBird:
             pygame.display.update()
             
             # Set game speed
-            clock.tick(120)
+            clock.tick(90)
 
 
 # Main function
