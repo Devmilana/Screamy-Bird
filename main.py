@@ -14,10 +14,10 @@ clock = pygame.time.Clock()
 
 
 # Game window
-screen_width = 1280
-screen_height = 720
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption('SCREAMY BIRD')
+screen_width = pygame.display.Info().current_w
+screen_height = pygame.display.Info().current_h
 
 
 # Colors
@@ -29,6 +29,7 @@ red = (255, 0, 0)
 
 # Background image
 background_img = pygame.image.load(os.path.join('img', 'bglong.png'))
+background_img = pygame.transform.scale(background_img, (screen_width, screen_height))
 
 
 # ------- BIRD CLASS ------- #
@@ -86,14 +87,15 @@ class Pipe:
         self.x_Pipe = screen_width # initial x position of pipe
         self.y_Pipe = 0 # initial y position of pipe
         self.Pipe_width = Pipe_width # width of pipe
-        self.Pipe_height = Pipe_height # height of pipe
+        self.Pipe_height = Pipe_height * screen_height // 720 # height of pipe
         self.gap = gap # gap between pipes
         self.passed = False # check if pipe has been passed over
 
     # Draw pipe to screen
     def draw(self):
         pygame.draw.rect(screen, green, [self.x_Pipe, self.y_Pipe, self.Pipe_width, self.Pipe_height]) # Draw top pipe
-        pygame.draw.rect(screen, green, [self.x_Pipe, self.y_Pipe + self.Pipe_height + self.gap,self.Pipe_width, screen_height]) # Draw bottom pipe with gap
+        bottom_pipe_height = screen_height - self.Pipe_height - self.gap
+        pygame.draw.rect(screen, green, [self.x_Pipe, self.y_Pipe + self.Pipe_height + self.gap, self.Pipe_width, bottom_pipe_height]) # Draw bottom pipe with gap
 
     # Move pipe to new position
     def move(self, x, y):
