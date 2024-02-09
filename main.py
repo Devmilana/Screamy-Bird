@@ -13,12 +13,17 @@ pygame.init()
 clock = pygame.time.Clock()
 
 
-# Game window
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-pygame.display.set_caption('SCREAMY BIRD')
-screen_width = pygame.display.Info().current_w
-screen_height = pygame.display.Info().current_h
+# Always fullscreen game window
+# screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+# pygame.display.set_caption('SCREAMY BIRD')
+# screen_width = pygame.display.Info().current_w
+# screen_height = pygame.display.Info().current_h
 
+# Manually set game window size
+screen_width = 1536
+screen_height = 864
+screen = pygame.display.set_mode((screen_width, screen_height)) 
+pygame.display.set_caption('SCREAMY BIRD')
 
 # Colors
 white = (255, 255, 255)
@@ -123,7 +128,7 @@ class ScreamyBird:
 
     bird = Bird(150, 200) # initial bird position
     score_display = ScoreDisplay() # score display
-    Pipe = Pipe(70, random.randint(0, int(screen_height / 2)), bird.img_height * 5) # initial pipe position with gap size
+    Pipe = Pipe(85, random.randint(0, int(screen_height / 2)), bird.img_height * 5) # initial pipe position with gap size
 
     def __init__(self):
         self.game_over = False
@@ -132,7 +137,7 @@ class ScreamyBird:
     def scream_check(indata, outdata, frames, time, status):
         scream_volume = np.linalg.norm(indata) # Normalize scream volume
         # Check scream volume threshold
-        if scream_volume > 1.3: 
+        if scream_volume > 2: 
             ScreamyBird.bird.fly() # bird jump if threshold passed
         else:
             ScreamyBird.bird.fall() # bird falls if threshold not reached
@@ -141,7 +146,7 @@ class ScreamyBird:
     def reset_game():
         ScreamyBird.bird = Bird(150, 200)
         ScreamyBird.score_display.reset()
-        ScreamyBird.Pipe = Pipe(70, random.randint(0, int(screen_height / 2)), ScreamyBird.bird.img_height * 5)
+        ScreamyBird.Pipe = Pipe(85, random.randint(0, int(screen_height / 2)), ScreamyBird.bird.img_height * 5)
 
     # Restart or exit game  
     def restart_exit(self):
@@ -203,8 +208,8 @@ class ScreamyBird:
         # Inital pipe position
         x_Pipe = screen_width
         y_Pipe = 0
-        Pipe_width = 70 # width of Pipes
-        Pipe_move = 6  # speed of incoming pipes
+        Pipe_width = 85 # width of Pipes
+        Pipe_move = 9  # speed of incoming pipes
         
         # Call reset game 
         ScreamyBird.reset_game()
@@ -253,7 +258,7 @@ class ScreamyBird:
             pygame.display.update()
             
             # Set game speed
-            clock.tick(90)
+            clock.tick(120)
 
 
 # Main function
