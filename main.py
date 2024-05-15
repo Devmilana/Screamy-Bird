@@ -5,19 +5,11 @@ import random
 import time
 import os
 
-# Initialise pygame
+# Initialize pygame
 pygame.init()
 
-
-# Initialise pygame clock
+# Initialize pygame clock
 clock = pygame.time.Clock()
-
-
-# Always fullscreen game window
-# screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-# pygame.display.set_caption('SCREAMY BIRD')
-# screen_width = pygame.display.Info().current_w
-# screen_height = pygame.display.Info().current_h
 
 # Manually set game window size
 screen_width = 900
@@ -31,11 +23,16 @@ green = (34, 139, 34)
 orange = (255, 165, 0)
 red = (255, 0, 0)
 
-
 # Background image
 background_img = pygame.image.load(os.path.join('img', 'bglong.png'))
 background_img = pygame.transform.scale(background_img, (screen_width, screen_height))
 
+# Get list of available input devices
+devices = sd.query_devices()
+input_devices = [device for device in devices if device['max_input_channels'] > 0]
+
+# Font
+font = pygame.font.Font('PressStart2P.ttf', 20)
 
 # ------- BIRD CLASS ------- #
 class Bird:
@@ -64,7 +61,6 @@ class Bird:
     def draw(self):
         screen.blit(self.img, (self.x, self.y))
 
-
 # ------- SCORE DISPLAY CLASS ------- #
 class ScoreDisplay:
     def __init__(self):
@@ -84,7 +80,6 @@ class ScoreDisplay:
     def draw(self):
         text = self.font.render(f'CURRENT SCORE: {self.score}', True, white)
         screen.blit(text, self.position)
-
 
 # ------- PIPE CLASS ------- #
 class Pipe:
@@ -122,16 +117,15 @@ class Pipe:
         return ((bird.y < self.Pipe_height or bird.y + bird.img_height > self.Pipe_height + self.gap) 
                 and bird.x + bird.img_width > self.x_Pipe and bird.x < self.x_Pipe + self.Pipe_width)
 
-
 # ------- (SCREAMY BIRD) MAIN GAME LOOP CLASS ------- #
 class ScreamyBird:
-
     bird = Bird(150, 200) # initial bird position
     score_display = ScoreDisplay() # score display
     Pipe = Pipe(85, random.randint(0, int(screen_height / 2)), bird.img_height * 5) # initial pipe position with gap size
 
-    def __init__(self):
+    def __init__(self, selected_device):
         self.game_over = False
+        self.selected_device = selected_device
 
     # Check scream threshold for jump
     def scream_check(indata, outdata, frames, time, status):
@@ -197,7 +191,6 @@ class ScreamyBird:
 
         self.play() # restart game
 
-
     # Call game over screen
     def gameOver(self):
         self.end_screen()
@@ -254,19 +247,51 @@ class ScreamyBird:
                 x_Pipe = screen_width
                 ScreamyBird.Pipe.Pipe_height = random.randint(0, int(screen_height / 2))
 
+            # Draw selected microphone name
+            mic_text = font.render(f'Using Mic: {self.selected_device}', True, white)
+            screen.blit(mic_text, (10, screen_height - 40))
+
             # Update screen
             pygame.display.update()
             
             # Set game speed
             clock.tick(90)
 
+# Microphone selection menu
+def mic_selection_menu():
+    selected_index = 0
+    while True:
+        screen.fill((0, 0, 0))
+        title_text = font.render('Select a Microphone:', True, white)
+        screen.blit(title_text, (10, 10))
+
+        for i, device in enumerate(input_devices):
+            color = white if i == selected_index else (100, 100, 100)
+            device_text = font.render(f'{i + 1}: {device["name"]}', True, color)
+            screen.blit(device_text, (10, 50 + i * 30))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return None
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP and selected_index > 0:
+                    selected_index -= 1
+                elif event.key == pygame.K_DOWN and selected_index < len(input_devices) - 1:
+                    selected_index += 1
+                elif event.key == pygame.K_RETURN:
+                    return input_devices[selected_index]['name']
 
 # Main function
 def main():
-    sd.Stream(callback=ScreamyBird.scream_check).start()
-    game = ScreamyBird()
-    game.play()
-
+    selected_device = mic_selection_menu()
+    if selected_device is not None:
+        sd.Stream(callback=ScreamyBird.scream_check).start()
+        game = ScreamyBird(selected_device)
+        game.play()
 
 #--- RUN MAIN FUNCTION ---#
 if __name__ == '__main__':
