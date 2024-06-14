@@ -15,6 +15,11 @@ numpy
 
 ==================== CHANGING WINDOW SIZE ======================
 
+Run with command: python.exe .\main.py
+
+
+==================== CHANGING WINDOW SIZE ======================
+
 By default, the screen window size is set to a flappy bird-esque window
 size (900 x 1060). This can be manually adjusted.
 
@@ -22,6 +27,12 @@ BE AWARE - Due to the way the game renders the bird and pipes to the
 screen; performance may be impacted when using a larger window. For best 
 results, a smaller full window (1536 x 864) or (900 x 1060) is
 recommended
+
+
+==================== CHANGING VOICE INPUT THRESHOLD ======================
+
+Adjust the value at line 134. Raise the threshold value for more screaming.
+
 
 ================ PLANNED FUTURE UPDATES ==================
 
