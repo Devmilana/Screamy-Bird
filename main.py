@@ -13,7 +13,7 @@ clock = pygame.time.Clock()
 
 # Manually set game window size
 screen_width = 900
-screen_height = 1060
+screen_height = 850
 screen = pygame.display.set_mode((screen_width, screen_height)) 
 pygame.display.set_caption('SCREAMY BIRD')
 
