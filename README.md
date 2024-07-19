@@ -21,6 +21,11 @@ Run with command: python.exe .\main.py
 
 ==================== CHANGING WINDOW SIZE ======================
 
+Run with command: python.exe .\main.py
+
+
+==================== CHANGING WINDOW SIZE ======================
+
 By default, the screen window size is set to a flappy bird-esque window
 size (900 x 1060). This can be manually adjusted.
 
